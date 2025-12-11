@@ -1,7 +1,7 @@
 import express,{Request,Response,NextFunction} from 'express';
 import {db} from '../db/connection.js';
-import { generateAccessToken } from '../utils/jwtToken';
-import { generateRefreshToken } from '../utils/jwtToken';
+import { generateAccessToken } from '../utils/jwtToken.js';
+import { generateRefreshToken } from '../utils/jwtToken.js';
 import validate from '../middleware/validation.js';
 import loginSchema from '../middleware/validationSchema/loginSchema.js';
 import {comparePassword} from '../utils/hashPassword.js';
