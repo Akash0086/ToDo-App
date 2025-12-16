@@ -1,0 +1,99 @@
+.navbar{
+  background-color: #669ddb;
+}
+.navbar ul{ 
+  display:flex;
+  list-style: none;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+
+}
+
+.navbar ul li a {
+  color: white;           
+  text-decoration: none;  
+  font-size: 18px;
+}
+
+.navbar ul li a:hover {
+  color: #ddd;
+  cursor: pointer;          
+}
+
+.cta-buttons {
+  margin-top: 20px;          /* This adds space ABOVE the buttons */
+  margin-left: 50px;
+  display: flex;             /* Bonus: makes buttons horizontal with even spacing */
+  justify-content:flex-start;   /* Centers the buttons */
+  gap: 30px;                 /* Replaces your manual margins */
+}
+.btn {
+  padding: 12px 24px;
+  text-decoration: none;
+  border: 2px solid rgb(113, 123, 188);
+  border-radius: 6px;
+  font-size: 18px;
+  color: rgb(54, 5, 249);
+  background-color: rgb(234, 240, 240);
+  transition: all 0.3s ease;  /* Optional: nice hover effect */
+}
+
+.btn:hover {
+  background-color: rgb(113, 123, 188);
+  color: white;
+}
+.intro{
+  display: flex;              /* Creates side-by-side layout */
+  gap: 40px;                  /* Space between text and image */
+
+  max-width: 1200px;          /* Optional: limit width */
+  padding: 20px;
+  flex-wrap: wrap;            /* Important: stack on small screens */
+}
+
+.intro-content {
+  flex: 1;                    /* Text takes available space */
+  min-width: 300px;           /* Prevents text from getting too narrow */
+}
+
+.intro-image {
+  flex: 1;                    /* Image takes available space */
+  min-width: 300px;
+}
+
+.intro-image img {
+  width: 100%;                /* Image fills its column */
+  max-width: 400px;           /* Optional: limit max size */
+  height: auto;
+  border-radius: 12px;        /* Nice rounded corners */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Optional: subtle shadow */
+}
+
+.features {
+  display: flex;
+  flex-direction: row;        /* Key fix: side-by-side */
+  gap: 60px;
+  max-width: 1200px;
+  padding: 20px;
+  flex-wrap: wrap;            /* Responsive: stacks on mobile */
+}
+
+.features-text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.feature-image {
+  flex: 1;
+  min-width: 300px;
+  margin-top: 20px;
+}
+
+.feature-image img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}

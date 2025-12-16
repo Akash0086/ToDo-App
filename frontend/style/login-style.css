@@ -1,0 +1,56 @@
+body{
+  background-image:url("/images/loginimage.png");
+  background-size:cover;                  /* image covers entire area */
+  background-position: center;             /* keeps image centered */
+  background-repeat: no-repeat;            /* prevents tiling */
+  height: 100vh;                           /* full viewport height */
+  margin: 0; 
+
+  display: flex;                   /* center the login box */
+  justify-content: center;
+  align-items: center;
+}
+input {
+  padding: 5px;
+  border-radius: 7px;
+}
+.login-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid white;
+  padding: 20px;
+  background: rgba(0,0,0,0.5);     /* optional: semi-transparent background */
+  color: white;
+  border-radius: 8px;
+}
+h1{
+  margin-bottom: 0px;
+}
+.login-intro{
+  margin-top: 5px;
+}
+.password,.email,.confirm-password{
+  margin-top: 10px;
+}
+
+.login-btn{
+  margin:20px 30% 5px 40%;
+  padding: 10px 30px;
+  border-radius: 50px;
+  transition: 0.5ms;
+  font-weight: bold;
+  
+  background-color: rgb(113, 123, 188);  /* Your app's blue */
+  color: white;
+
+}
+
+.login-btn:hover{
+  background-color: antiquewhite;
+  color:black;
+}
+
+a{
+  color:azure
+}
