@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // ESM (still!)
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+
+    // Type safety (same as before)
+    "strict": true,
+
+    // Interop
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    // Output
+    "outDir": "./dist",
+    "rootDir": "./",
+
+    // Performance / sanity
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+
+  "include": [
+    "server.ts",
+    "auth/**/*.ts",
+    "middleware/**/*.ts",
+    "models/**/*.ts",
+    "types/**/*.d.ts"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

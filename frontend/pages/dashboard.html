@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo App</title>
+  <link rel="stylesheet" href="../style/dashboard.css">
+</head>
+<body>
+  <header class="page-header">
+  <div>
+    <h1>Todo Dashboard</h1>
+    <p>Manage your tasks and track progress</p>
+  </div>
+
+<div class="user-actions">
+  <div class="profile-avatar" title="Profile">
+    <!-- User SVG -->
+    <svg viewBox="0 0 24 24" width="22" height="22">
+      <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/>
+    </svg>
+    <ul class="profile-dropdown">
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="#" id="logoutBtn">Logout</a></li>
+    </ul>
+  </div>
+  
+    <button class="icon-btn" title="Notifications">
+    <!-- Bell SVG -->
+    <svg viewBox="0 0 24 24" width="20" height="20">
+      <path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1l-2-2z"/>
+    </svg>
+  </button>
+
+</div> 
+</header>
+
+<div class="app-layout">  
+  <aside class="sidebar">
+    <h2 class="logo">Todo</h2>
+    <nav>
+      <a class="active">Dashboard</a>
+      <a>AI Assistant</a>
+    </nav>
+  </aside>
+
+
+  <main class="main-content">
+
+      <div class="filters">
+  <input type="text" id="searchInput" placeholder="Search task..." />
+
+  <select id="categoryFilter">
+    <option value="">All Categories</option>
+    <option value="study">Study</option>
+    <option value="work">Work</option>
+  </select>
+
+  <select id="statusFilter">
+    <option value="">All Status</option>
+    <option value="pending">Pending</option>
+    <option value="completed">Completed</option>
+  </select>
+
+  <button id="filterBtn">Apply</button>
+</div>
+
+<div class="top-actions">
+  <button class="add-btn">+ Add Task</button>
+</div>
+
+    <div class="table-card">
+  <table>
+        <thead>
+      <tr>
+        <th>id</th>
+        <th>task</th>
+        <th>category</th>
+        <th>status</th>
+        <th>Actions</th>
+        
+      </tr>     
+    </thead>
+    <tbody id="todo-table">     
+
+    </tbody>   
+  </table>
+</div>
+
+<div id="pagination"></div>
+  
+  </main>
+
+</div>
+
+
+  
+
+  <script type="module" src="../scripts/dashboard.js"></script>
+</body>
+</html>
+
