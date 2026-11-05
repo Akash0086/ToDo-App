@@ -47,3 +47,42 @@ jobs:
           tags: |
             ghcr.io/${{ steps.string.outputs.OWNER_LOWER }}/todo-backend:latest
             ghcr.io/${{ steps.string.outputs.OWNER_LOWER }}/todo-backend:${{ github.sha }}
+
+  deploy-to-ec2:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Lowercase Repository Owner Name
+        id: string
+        run: |
+          echo "OWNER_LOWER=${OWNER,,}" >> $GITHUB_OUTPUT
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ steps.string.outputs.OWNER_LOWER }}
+          ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: GITHUB_TOKEN,REPO_OWNER,ACTOR
+          script: |
+            # Log in to GitHub Container Registry inside EC2
+            echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$ACTOR" --password-stdin
+
+            # Stop and remove previous container if running
+            docker stop todo-backend || true
+            docker rm todo-backend || true
+
+            # Pull latest container image and start service
+            docker pull ghcr.io/$REPO_OWNER/todo-backend:latest
+            docker run -d \
+              --name todo-backend \
+              --restart always \
+              -p 3000:3000 \
+              ghcr.io/$REPO_OWNER/todo-backend:latest
