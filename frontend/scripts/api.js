@@ -1,21 +1,23 @@
+import { API_BASE_URL } from "../services/config.js";
+
 export default async function apiFetch(url, options = {}) {
   const accessToken = localStorage.getItem("accessToken");
 
   const isJsonBody =
-  options.body &&
-  typeof options.body === "object" &&
-  !(options.body instanceof FormData);
+    options.body &&
+    typeof options.body === "object" &&
+    !(options.body instanceof FormData);
 
   const response = await fetch(url, {
-  ...options,
-  headers: {
-    ...(isJsonBody ? { "Content-Type": "application/json" } : {}),
-    ...(options.headers || {}),
-    Authorization: `Bearer ${accessToken}`,
-  },
-  body: isJsonBody ? JSON.stringify(options.body) : options.body,
-  credentials: "include",
-});
+    ...options,
+    headers: {
+      ...(isJsonBody ? { "Content-Type": "application/json" } : {}),
+      ...(options.headers || {}),
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: isJsonBody ? JSON.stringify(options.body) : options.body,
+    credentials: "include",
+  });
 
   // If token expired -> try refresh
   if (response.status === 401 || response.status === 403) {
@@ -31,15 +33,15 @@ export default async function apiFetch(url, options = {}) {
   }
 
   const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")){
+  if (contentType && contentType.includes("application/json")) {
     const data = await response.json();
-    if (!response.ok){
+    if (!response.ok) {
       throw new Error(data.message || "Request failed");
     }
     return data;
   }
-  
-  if (!response.ok){
+
+  if (!response.ok) {
     throw new Error("Request failed");
   }
   return response;
@@ -47,9 +49,9 @@ export default async function apiFetch(url, options = {}) {
 
 async function refreshAccessToken() {
   try {
-    const res = await fetch("http://localhost:3000/auth/refresh", {
+    const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: "POST",
-      credentials: "include", 
+      credentials: "include",
     });
 
     if (!res.ok) return false;
@@ -61,4 +63,11 @@ async function refreshAccessToken() {
   } catch {
     return false;
   }
+}
+
+function logout() {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("username");
+  localStorage.removeItem("email");
+  window.location.href = "login.html";
 }

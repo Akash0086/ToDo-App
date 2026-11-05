@@ -1,4 +1,3 @@
-//=================Get started=========================
 const getStartedBtn = document.getElementById("getStartedBtn");
 
 getStartedBtn.addEventListener("click", (e) => {

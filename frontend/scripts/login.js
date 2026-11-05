@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../services/config.js";
+
 //alert("login.js loaded");
 const form = document.getElementById("loginForm");
 console.log("FORM:", form);
@@ -10,25 +12,27 @@ form.addEventListener("submit", async (e) => {
 
   console.log(email, password);
 
-  const response=await fetch('http://localhost:3000/auth/login',{
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body:JSON.stringify({email,password})
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-  if(response.ok){
-    const data = await response.json();
-    console.log("Login success", data);
-    localStorage.setItem("accessToken", data.accessToken);
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Login success", data);
+      localStorage.setItem("accessToken", data.accessToken);
 
-    localStorage.setItem("username", data.user.username);
-    localStorage.setItem("email", data.user.email);
+      localStorage.setItem("username", data.user.username);
+      localStorage.setItem("email", data.user.email);
 
-    window.location.href = "../pages/index.html";
-
-  }else{
-    const error=await response.json();
-    console.log("login Failed",error.message);
+      window.location.href = "../pages/index.html";
+    } else {
+      const error = await response.json();
+      console.log("Login Failed", error.message);
+    }
+  } catch (err) {
+    console.error("Network or CORS error during login:", err);
   }
-
 });
