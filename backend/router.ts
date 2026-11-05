@@ -14,6 +14,258 @@ import { authorizeRole } from "./middleware/authorizeRole";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   - name: Todos
+ *     description: CRUD operations for authenticated user's todos
+ *
+ * /todos:
+ *   get:
+ *     summary: Retrieve paginated list of todos
+ *     description: |
+ *       Returns the authenticated user's todos with support for:
+ *       - Pagination (page, limit)
+ *       - Text search on task
+ *       - Filtering by category, status, exact created_at date
+ *       - Sorting by category/status/created_at (with ASC/DESC)
+ *       
+ *       All results are scoped to the current user (userId from JWT).
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number (1-based)
+ *         required: false
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 5
+ *         description: Items per page
+ *         required: false
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *           minLength: 1
+ *         description: Partial text search in task (case-insensitive)
+ *         required: false
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Exact category match
+ *         required: false
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, in-progress, completed]
+ *         description: Exact status match
+ *         required: false
+ *       - in: query
+ *         name: created_at
+ *         schema:
+ *           type: string
+ *           format: date
+ *           example: 2025-03-13
+ *         description: Exact creation date (YYYY-MM-DD)
+ *         required: false
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           pattern: '^(category|status|created_at):(ASC|DESC)$'
+ *           example: status:DESC
+ *         description: Sort format "field:DIRECTION". Default status:DESC
+ *         required: false
+ *     responses:
+ *       200:
+ *         description: Paginated todos list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TodoListResponse'
+ *       400:
+ *         description: Invalid parameters (pagination, sort, etc.)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Missing or invalid JWT
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ *       403:
+ *         description: Forbidden (insufficient role)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *
+ *   post:
+ *     summary: Create a new todo
+ *     description: Creates a todo owned by the authenticated user. ID is auto-generated as "task{timestamp}".
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - task
+ *               - category
+ *             properties:
+ *               task:
+ *                 type: string
+ *                 minLength: 1
+ *                 example: Finish project documentation
+ *               category:
+ *                 type: string
+ *                 example: Work
+ *               status:
+ *                 type: string
+ *                 enum: [pending, in-progress, completed]
+ *                 default: pending
+ *                 example: pending
+ *     responses:
+ *       201:
+ *         description: Todo created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Todo'
+ *       400:
+ *         description: Validation failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *
+ * /todos/{id}:
+ *   put:
+ *     summary: Update a todo
+ *     description: Updates fields of an existing todo (partial update allowed). Only the owner can update.
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Todo custom ID (e.g. task1739456789123)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               task:
+ *                 type: string
+ *                 example: Updated task description
+ *               category:
+ *                 type: string
+ *                 example: Personal
+ *               status:
+ *                 type: string
+ *                 enum: [pending, in-progress, completed]
+ *                 example: completed
+ *     responses:
+ *       200:
+ *         description: Todo updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Not owner or insufficient role
+ *       404:
+ *         description: Todo not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *
+ *   delete:
+ *     summary: Delete a todo
+ *     description: Deletes a todo if the authenticated user is the owner.
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Todo ID to delete
+ *     responses:
+ *       200:
+ *         description: Todo deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden (not owner)
+ *       404:
+ *         description: Todo not found
+ */
+
+/**
+ * @swagger
+ * /todos/health:
+ *   get:
+ *     summary: Health check for todos router
+ *     tags: [Todos]
+ *     responses:
+ *       200:
+ *         description: Server is alive
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: ok
+ */
+
 // GET
 router.get(
   "/",
@@ -211,4 +463,9 @@ router.delete("/:id",
     return res.json({ success: true });
   })
 );
+
+
+router.get('/health', (req, res) => res.json({ status: 'ok' }));
+
+
 export default router;

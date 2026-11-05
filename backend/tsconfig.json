@@ -3,7 +3,7 @@
     // ESM (still!)
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
 
     // Type safety (same as before)
     "strict": true,
@@ -27,7 +27,7 @@
     "middleware/**/*.ts",
     "models/**/*.ts",
     "types/**/*.d.ts"
-  ],
+, "swagger.ts"  ],
 
   "exclude": [
     "node_modules",
