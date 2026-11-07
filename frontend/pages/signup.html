@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../style/login-style.css">
-  <title>login</title>
+  <link rel="stylesheet" href="/style/login-style.css">
+  <title>SignUp</title>
 </head>
 <body>
   <div class="login-container">
-    <div></div>
     <h1>SignUp</h1>
-    <p class="login-intro">Your productivity starts here-simple, secure, and effective.</p>
-    <form action="/login" method="POST">
+    <p class="login-intro">Your productivity starts here—simple, secure, and effective.</p>
+    
+    <form id="signupForm">
       <div class="username">
-        <label for="user">User Name</label><br>
+        <label for="username">User Name</label><br>
         <input type="text" name="username" id="username" required><br>
       </div>
 
@@ -24,21 +24,24 @@
 
       <div class="password">
         <label for="password">Password</label><br>
-        <input  type="password" name="password" id="password" required><br>
+        <input type="password" name="password" id="password" required><br>
       </div>
 
       <div class="confirm-password">
         <label for="confirm-password">Confirm Password</label><br>
-        <input  type="password" name="confirm-password" id="confirm-password" required><br>
+        <input type="password" name="confirm-password" id="confirm-password" required><br>
       </div>
 
-      <button type="button" class="login-btn">SignUp</button>
-  </form>
+      <button type="submit" class="login-btn">SignUp</button>
+    </form>
 
-  <div class="extra-links">
-    <p>Already have an account? <a href="login.html">Login</a></p>
+    <div class="extra-links">
+      <!-- Point directly to pages/login.html from S3 root -->
+      <p>Already have an account? <a href="/pages/login.html">Login</a></p>
+    </div>
   </div>
-  </div>
-  
+
+  <!-- Import the signup script as an ES Module -->
+  <script type="module" src="../scripts/signup.js"></script>
 </body>
 </html>
