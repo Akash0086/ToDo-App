@@ -1,4 +1,6 @@
-const PRODUCTION_API_URL = "http://15.135.88.102";
+// CloudFront now handles HTTPS termination and proxies /auth/* and /todo/* to EC2
+const PRODUCTION_API_URL = "https://dmyooievjdspk.cloudfront.net";
+
 const LOCAL_API_URL = "http://localhost:3000";
 
 export const API_BASE_URL =
