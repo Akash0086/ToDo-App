@@ -1,4 +1,4 @@
-const PRODUCTION_API_URL = "http://3.26.101.96";
+const PRODUCTION_API_URL = "http://15.135.88.102";
 
 const LOCAL_API_URL = "http://localhost:3000";
 
