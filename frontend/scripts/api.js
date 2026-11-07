@@ -69,5 +69,5 @@ function logout() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("username");
   localStorage.removeItem("email");
-  window.location.href = "login.html";
+  window.location.href = "/pages/login.html";
 }

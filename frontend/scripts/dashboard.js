@@ -250,5 +250,5 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("accessToken");
-  window.location.href = "login.html";
+  window.location.href = "/pages/login.html";
 });
