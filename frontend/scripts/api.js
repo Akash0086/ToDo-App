@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../services/config.js";
 
-export default async function apiFetch(url, options = {}) {
+export default async function apiFetch(url, options = {}, isRetry = false) {
   const accessToken = localStorage.getItem("accessToken");
 
   const isJsonBody =
@@ -19,13 +19,13 @@ export default async function apiFetch(url, options = {}) {
     credentials: "include",
   });
 
-  // If token expired -> try refresh
-  if (response.status === 401 || response.status === 403) {
+  // If token expired / unauthorized and haven't retried yet -> try refresh once
+  if ((response.status === 401 || response.status === 403) && !isRetry) {
     const refreshed = await refreshAccessToken();
 
     if (refreshed) {
-      // retry original request
-      return apiFetch(url, options);
+      // retry original request once
+      return apiFetch(url, options, true);
     } else {
       logout();
       throw new Error("Session expired");
@@ -36,13 +36,13 @@ export default async function apiFetch(url, options = {}) {
   if (contentType && contentType.includes("application/json")) {
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.message || "Request failed");
+      throw new Error(data.message || `Request failed with status ${response.status}`);
     }
     return data;
   }
 
   if (!response.ok) {
-    throw new Error("Request failed");
+    throw new Error(`Request failed with status ${response.status}`);
   }
   return response;
 }

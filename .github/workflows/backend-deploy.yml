@@ -84,5 +84,7 @@ jobs:
             docker run -d \
               --name todo-backend \
               --restart always \
+              --env-file /home/ubuntu/.env \
               -p 3000:3000 \
               ghcr.io/$REPO_OWNER/todo-backend:latest
+
